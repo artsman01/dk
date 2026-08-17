@@ -1458,6 +1458,7 @@ p {
   position: relative;
   width: 56px;
   height: 56px;
+  overflow: hidden;
   background: var(--color-glass-bg);
   border-right: 1px solid var(--color-glass-border);
   border-bottom: 1px solid var(--color-glass-border);
@@ -1486,6 +1487,37 @@ p {
 .start__item {
   position: absolute;
   inset: 4px;
+}
+
+/* Лёгкий блик, пробегающий по всем занятым ячейкам одновременно — держит
+   диагональную полосу света за пределами ячейки почти весь цикл (0–85%)
+   и пробегает по ней за оставшиеся 15%. Все ячейки используют одну и ту
+   же анимацию без индивидуальной задержки, поэтому запускаются синхронно
+   (общая точка отсчёта — момент применения стилей). */
+.start__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: translateX(-120%);
+  animation: start-item-shine 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes start-item-shine {
+  0%, 85% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start__item::after {
+    animation: none;
+    display: none;
+  }
 }
 
 .start__item-icon {

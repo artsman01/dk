@@ -64,7 +64,12 @@
 // берётся сторона с большим запасом места. На устройствах с ховером —
 // курсор может перейти с ячейки на сам поповер (выделить текст, нажать
 // "Подробнее") без того, чтобы поповер спрятался: скрытие откладывается на
-// 150мс и отменяется, если курсор зашёл на ячейку/поповер за это время. На
+// 150мс и отменяется, если курсор зашёл на ячейку/поповер за это время.
+// Между ячейкой и поповером сознательно есть зазор (EDGE_GAP) — курсор по
+// пути к поповеру часто задевает соседнюю ячейку в сетке. Чтобы это не
+// перещёлкивало поповер на соседа, показ тоже отложен (SHOW_DELAY): если
+// курсор ушёл с ячейки раньше, чем показ успел сработать, ячейка просто
+// не успевает "перехватить" поповер, и он спокойно долетает до цели. На
 // тач — тап по ячейке (повторный тап по той же ячейке или тап вне грида
 // закрывает).
 (function () {
@@ -73,7 +78,10 @@
   if (!cells.length || !popover) return;
 
   const EDGE_GAP = 8;
+  const SHOW_DELAY = 120;
+  const HIDE_DELAY = 150;
   let hideTimer = null;
+  let showTimer = null;
 
   function positionPopover(cell) {
     const cellRect = cell.getBoundingClientRect();
@@ -114,16 +122,31 @@
 
   function scheduleHide() {
     cancelHide();
-    hideTimer = setTimeout(hidePopover, 150);
+    hideTimer = setTimeout(hidePopover, HIDE_DELAY);
+  }
+
+  function cancelShow() {
+    if (showTimer) {
+      clearTimeout(showTimer);
+      showTimer = null;
+    }
+  }
+
+  function scheduleShow(cell) {
+    cancelShow();
+    showTimer = setTimeout(() => showPopover(cell), SHOW_DELAY);
   }
 
   if (window.matchMedia("(hover: hover)").matches) {
     cells.forEach((cell) => {
       cell.addEventListener("mouseenter", () => {
         cancelHide();
-        showPopover(cell);
+        scheduleShow(cell);
       });
-      cell.addEventListener("mouseleave", scheduleHide);
+      cell.addEventListener("mouseleave", () => {
+        cancelShow();
+        scheduleHide();
+      });
     });
 
     popover.addEventListener("mouseenter", cancelHide);
