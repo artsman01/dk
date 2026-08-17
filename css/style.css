@@ -1,0 +1,1127 @@
+/* ==========================================================================
+   Death Knight — Hero block
+   Источник: Figma "BAZA DK 2.0", node 1:56 (Desktop) / 1:356 (Tablet) / 1:441 (Mobile)
+   Breakpoints: <768 = Mobile, 768–1023 = Tablet, >=1024 = Desktop
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0D0C0B;
+  font-family: "Inter Tight", "Segoe UI", Arial, sans-serif;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* --------------------------------------------------------------------
+   Film-grain шум на всю страницу. Один статичный тайл (свой, не чужой
+   CDN), позиция тайла рандомизируется через JS раз в 100мс (см. main.js)
+   — дёшево: просто смена background-position, без canvas/перерисовки.
+   mix-blend-mode:normal (не overlay/screen) — зерно видно и на тёмном,
+   и на светлом фоне без спецэффектов. Плавное появление через класс
+   после загрузки страницы, чтобы не мигало сразу.
+   -------------------------------------------------------------------- */
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  background-image: url("../assets/img/noise.png");
+  background-size: 170px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.noise-overlay--visible {
+  opacity: 0.03;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------
+   Fonts
+   Akrobat (Black 900, Bold 700) не входит в Google Fonts — файлы должны
+   быть добавлены в assets/fonts/. До этого используется системный fallback.
+   -------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Akrobat";
+  src: url("../assets/fonts/Akrobat-Black.woff2") format("woff2"),
+       url("../assets/fonts/Akrobat-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Akrobat";
+  src: url("../assets/fonts/Akrobat-Bold.woff2") format("woff2"),
+       url("../assets/fonts/Akrobat-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-bg: #0D0C0B;
+  --color-cream: #D5C9BD;
+  --color-milk: #ECE4D5;
+  --color-red: #E12D27;
+  --color-red-light: #FF8543;
+  --color-red-hover: #B4241F;
+  --color-white: #FFFFFF;
+  --color-glass-bg: rgba(47, 47, 47, 0.48);
+  --color-glass-border: rgba(213, 201, 189, 0.16);
+  --color-stat-divider: rgba(213, 201, 189, 0.08);
+
+  --font-display: "Akrobat", "Arial Narrow", sans-serif;
+  --font-text: "Inter Tight", "Segoe UI", Arial, sans-serif;
+}
+
+/* ==========================================================================
+   Hero — базовые стили (Mobile, 320–767px, fluid 393→768)
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  background: var(--color-bg);
+  overflow: clip;
+}
+
+.hero__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 96px 16px 16px;
+}
+
+/* ---- Brand group: лого + меню вместе, одной группой у левого края,
+   фикс при скролле ---- */
+
+.hero__brand {
+  position: fixed;
+  z-index: 50;
+  left: 16px;
+  top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.hero__logo {
+  width: clamp(23px, 11.1726px + 3.0095vw, 34.2857px);
+  height: clamp(32px, 15.232px + 4.2667vw, 48px);
+  flex-shrink: 0;
+}
+
+.hero__logo img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- Menu ---- */
+
+.hero__menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: clamp(200px, 192.664px + 1.8667vw, 207px);
+}
+
+.hero__menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 888px;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(10.8px);
+  -webkit-backdrop-filter: blur(10.8px);
+  color: rgba(213, 201, 189, 0.64);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(13px, 11.952px + 0.2667vw, 14px);
+  line-height: clamp(18px, 15.808px + 0.5333vw, 20px);
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.hero__menu-item--wide {
+  flex: 1;
+}
+
+.hero__menu-item:hover {
+  color: var(--color-bg);
+  background: var(--color-cream);
+  border-color: var(--color-cream);
+  transform: scale(0.96);
+}
+
+/* ---- Redline-group: красная линия + бейдж даты — единый блок.
+   Absolute внутри .hero__inner (не fixed — скроллится вместе с Hero,
+   не остаётся поверх следующих блоков), растянут по всей высоте канвы
+   через top:0/bottom:0. Сдвигается влево-вправо вслед за курсором через
+   --parallax-x (см. js/main.js), диапазон движения небольшой. ---- */
+
+.hero__redline-group {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  right: clamp(-156px, calc(-353.024px + 50.1333 * var(--vw100, 100vw) / 100), 32px);
+  width: 240px;
+  pointer-events: none;
+  transform: translateX(var(--parallax-x, 0px));
+  transition: transform 0.2s ease-out;
+}
+
+.hero__redline {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__redline-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* Бейдж всегда прижат к самому верху экрана; обводка только сверху, 2px */
+.hero__date-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 2px solid var(--color-red);
+}
+
+.hero__date-badge span {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(18px, 15.904px + 0.5333vw, 20px);
+  line-height: clamp(20px, 17.408px + 0.6667vw, 24px);
+  text-transform: uppercase;
+}
+
+/* ---- Visual (артворк + вордмарк DK + плашка даты + subtitle pill) ---- */
+
+.hero__visual {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero__artwork-wrap {
+  position: relative;
+  width: 91.665%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Двигается вслед за курсором в направлении, противоположном redline-group
+   (см. js/main.js) — только сам артворк персонажа. Вордмарк "DEATH KNIGHT"
+   и subtitle-pill лежат вне этого блока и не двигаются. */
+.hero__artwork {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1725 / 1798;
+  overflow: hidden;
+  transform: translateX(var(--parallax-x-char, 0px));
+  transition: transform 0.2s ease-out;
+}
+
+.hero__artwork-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  /* Отключаем нативный ховер-виджет браузера (Lens/Copilot и т.п.) и любые
+     действия с картинкой — курсор проходит "сквозь" img к родителю. */
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Растянут на всю ширину хиро-блока (не только под артворком) — вынесен
+   из .hero__artwork (там overflow:hidden клипует по ширине контейнера)
+   и из .hero__inner (там padding/max-width), absolute относительно
+   всей секции .hero. Скроллится вместе с Hero, не остаётся поверх
+   следующих блоков. */
+/* Плавный фейд из непрозрачного bg в прозрачный: обычный 2-стопный
+   linear-gradient даёт видимые полосы (banding) на тёмном — глаз
+   нелинейно чувствителен к тёмным тонам. Промежуточные стопы по
+   easing-кривой (не линейно) убирают полосатость. */
+.hero__artwork-gradient {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44.28vw;
+  background: linear-gradient(
+    to top,
+    rgba(13, 12, 11, 1) 0%,
+    rgba(13, 12, 11, 0.987) 8.1%,
+    rgba(13, 12, 11, 0.951) 15.5%,
+    rgba(13, 12, 11, 0.896) 22.5%,
+    rgba(13, 12, 11, 0.825) 29%,
+    rgba(13, 12, 11, 0.741) 35.3%,
+    rgba(13, 12, 11, 0.648) 41.2%,
+    rgba(13, 12, 11, 0.55) 47.1%,
+    rgba(13, 12, 11, 0.45) 52.9%,
+    rgba(13, 12, 11, 0.352) 58.8%,
+    rgba(13, 12, 11, 0.259) 64.7%,
+    rgba(13, 12, 11, 0.175) 70.9%,
+    rgba(13, 12, 11, 0.104) 77.4%,
+    rgba(13, 12, 11, 0.049) 84.4%,
+    rgba(13, 12, 11, 0.013) 91.8%,
+    rgba(13, 12, 11, 0) 100%
+  );
+  pointer-events: none;
+}
+
+/* На Mobile/Tablet вордмарк идёт отдельным блоком СРАЗУ ПОД артворком (не поверх).
+   max-width:none снимает глобальный img{max-width:100%} — на Desktop надпись
+   шире своего контейнера (153% от артворка), это не баг, а замысел макета. */
+.hero__title-vector {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.hero__date-split {
+  position: absolute;
+  left: 50%;
+  bottom: 8.05%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 32px;
+}
+
+.hero__date-split-bg {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+}
+
+.hero__date-split-bg--left {
+  left: 0;
+}
+
+.hero__date-split-bg--right {
+  right: 0;
+}
+
+.hero__date-split-bg--tablet {
+  display: none;
+}
+
+.hero__date-split-text {
+  position: relative;
+  z-index: 1;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.hero__subtitle-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(224px, 208.28px + 4vw, 239px);
+  height: clamp(32px, 21.52px + 2.6667vw, 42px);
+  padding: 0 16px;
+  border-radius: 888px;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(10.8px);
+  -webkit-backdrop-filter: blur(10.8px);
+  margin-top: 16px;
+}
+
+.hero__subtitle-pill span {
+  color: rgba(213, 201, 189, 0.64);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(13px, 11.952px + 0.2667vw, 14px);
+  line-height: clamp(18px, 15.808px + 0.5333vw, 20px);
+  white-space: nowrap;
+}
+
+/* ---- Текстовый контент ---- */
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  max-width: 322px;
+}
+
+.hero__title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(32px, -1.536px + 8.5333vw, 64px);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+
+.hero__title-row--accent {
+  color: var(--color-red);
+}
+
+.hero__info {
+  width: 100%;
+  height: 128px;
+  display: flex;
+  align-items: center;
+}
+
+.hero__info p {
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(16px, 13.904px + 0.5333vw, 18px);
+  line-height: clamp(26px, 23.904px + 0.5333vw, 28px);
+  text-align: center;
+}
+
+/* ---- CTA (кнопка + инфо-текст) ---- */
+
+/* Зафиксирован в правом нижнем углу экрана, остаётся на месте при скролле
+   всей страницы (не только hero-блока). */
+.hero__cta {
+  position: fixed;
+  z-index: 50;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  width: clamp(162px, 145.232px + 4.2667vw, 178px);
+  padding: 0 24px;
+  border-radius: 10px;
+  background: var(--color-red);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.hero__button:hover {
+  background: var(--color-red-hover);
+  transform: scale(0.96);
+}
+
+.hero__button span {
+  color: var(--color-white);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.hero__cta-text {
+  color: rgba(213, 201, 189, 0.64);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  width: 157px;
+}
+
+/* ---- Quote ---- */
+
+/* На Mobile остаётся в обычном потоке — рядом с fixed-логотипом/меню и quote
+   (оба ~250-360px) физически не хватает места на узком экране без наложения.
+   С Tablet становится fixed в правом верхнем углу (см. медиа-запрос ниже). */
+.hero__quote {
+  position: relative;
+  z-index: 2;
+  width: min(364px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__quote-media {
+  position: relative;
+  width: 100%;
+  height: 204px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.35s ease;
+}
+
+.hero__quote-media:hover {
+  transform: scale(0.97);
+}
+
+.hero__quote-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__quote-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 12, 11, 0.24);
+}
+
+
+.hero__quote-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+}
+
+.hero__quote-quote {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(18px, 15.904px + 0.5333vw, 20px);
+  line-height: clamp(20px, 17.408px + 0.6667vw, 24px);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hero__quote-credit {
+  color: rgba(213, 201, 189, 0.48);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(13px, 11.952px + 0.2667vw, 14px);
+  line-height: clamp(18px, 15.808px + 0.5333vw, 20px);
+  text-align: center;
+}
+
+/* ==========================================================================
+   Tablet (768–1023px)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .hero__inner {
+    /* top-padding с запасом, чтобы контент не заезжал под absolute
+       quote-карточку (top:32, ~293px высотой) в правом верхнем углу */
+    padding: 360px 32px 32px;
+  }
+
+  .hero__brand {
+    left: 32px;
+    top: 32px;
+  }
+
+  /* На Tablet порядок блоков во flow: текст → CTA-карточка → артворк → quote */
+  .hero__content {
+    order: 0;
+  }
+
+  .hero__cta {
+    order: 1;
+  }
+
+  .hero__visual {
+    order: 2;
+  }
+
+  .hero__quote {
+    position: absolute;
+    z-index: 45;
+    top: 32px;
+    /* .hero__inner центрируется и капается в max-width:1680px на широких
+       экранах (Desktop) — обычный right:32px "прилипал" бы к краю канвы,
+       а не экрана. Компенсируем половину зазора канвы, чтобы карточка
+       всегда была ровно в 32px от истинного края окна. */
+    right: calc(32px - max(0px, (var(--vw100, 100vw) - 1680px) / 2));
+    width: min(364px, calc(var(--vw100, 100vw) - 64px));
+    margin: 0;
+  }
+
+  .hero__date-split {
+    width: 192px;
+    height: 48px;
+    bottom: 6.19%;
+  }
+
+  .hero__date-split-text {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .hero__date-split-bg--mobile {
+    display: none;
+  }
+
+  .hero__date-split-bg--tablet {
+    display: block;
+  }
+
+  .hero__text {
+    max-width: 536px;
+  }
+
+  .hero__info {
+    padding-left: 48px;
+    border-left: 1px solid var(--color-glass-border);
+    max-width: 536px;
+    margin: 0 auto;
+  }
+
+  /* Info card возвращается к горизонтальной "стеклянной" карточке */
+  .hero__cta {
+    right: 32px;
+    bottom: 32px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: 400px;
+    min-height: 64px;
+    padding: 8px 8px 8px 16px;
+    border-radius: 12px;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(10.8px);
+    -webkit-backdrop-filter: blur(10.8px);
+  }
+
+  .hero__cta-text {
+    text-align: left;
+    color: rgba(213, 201, 189, 0.64);
+  }
+}
+
+/* ==========================================================================
+   Desktop (>=1024px) — absolute canvas layout, 1:1 с Figma (1680×980)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .hero__inner {
+    width: 100%;
+    max-width: 1680px;
+    aspect-ratio: 1680 / 980;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 32px;
+    display: block;
+    gap: 0;
+  }
+
+  /* На Desktop редлайн держится за персонажа в % от канвы (34.524% —
+     это ровно 580px при эталонных 1680px), а не в px — иначе между
+     1024 и 1680px он "плавает" отдельно от растущего персонажа и на
+     границе 1680px даёт скачок на 580px разом. При >=1680px этот же
+     580px подхватывает calc-формула ниже (компенсация центрирования
+     канвы) — переход непрерывный. */
+  .hero__redline-group {
+    right: 34.524%;
+  }
+
+  /* ---- Visual: артворк занимает правую половину канвы, DK — квадрат.
+     Absolute внутри .hero__inner (не fixed — скроллится вместе с Hero).
+     Ширина растёт с реальной шириной экрана (--vw100), НО дополнительно
+     ограничена высотой канвы (95.936% от 100vh−32px — это ширина, при
+     которой персонаж высотой в aspect-ratio 1725:1798 ровно влезает по
+     высоте) — иначе на широких-но-невысоких окнах (напр. 2547×969)
+     персонаж вылезает выше canvas и обрезается overflow:clip сверху.
+     Получается как object-fit:contain — упирается в то ограничение
+     (ширина/высота), которое достигается первым. --char-w общая
+     переменная для width и центрирующего left. ---- */
+
+  .hero__visual {
+    order: 0;
+    position: absolute;
+    z-index: 2;
+    --char-w: min(
+      calc(54.048 * var(--vw100, 100vw) / 100),
+      calc(95.936 * (100vh - 32px) / 100)
+    );
+    left: calc((var(--vw100, 100vw) - var(--char-w)) / 2 - max(0px, (var(--vw100, 100vw) - 1680px) / 2));
+    bottom: 0;
+    width: var(--char-w);
+    height: auto;
+    display: block;
+    gap: 0;
+  }
+
+  .hero__artwork-wrap {
+    width: 100%;
+    display: block;
+  }
+
+  .hero__artwork {
+    width: 100%;
+    aspect-ratio: 1725 / 1798;
+  }
+
+  .hero__artwork-gradient {
+    height: 18.03vw;
+  }
+
+  /* На Desktop вордмарк лежит АБСОЛЮТНО поверх артворка (не под ним, как на Tablet/Mobile) */
+  .hero__title-vector {
+    position: absolute;
+    left: 50%;
+    top: 35.79%;
+    transform: translateX(-50%);
+    width: 153.02%;
+    z-index: 1;
+  }
+
+  .hero__date-split {
+    display: none;
+  }
+
+  /* top = нижний край title-vector (55.385% высоты артворка) + ровно 16px */
+  .hero__subtitle-pill {
+    position: absolute;
+    left: 50%;
+    top: calc(55.385% + 16px);
+    transform: translateX(-50%);
+    margin-top: 0;
+  }
+
+  /* ---- Offer (заголовок) + description: absolute слева-снизу канвы,
+     скроллится вместе с Hero (не fixed). ---- */
+
+  .hero__content {
+    position: absolute;
+    z-index: 40;
+    /* см. комментарий у .hero__quote — та же компенсация зазора канвы,
+       но с левого края */
+    left: calc(32px - max(0px, (var(--vw100, 100vw) - 1680px) / 2));
+    bottom: 32px;
+    max-width: calc(100% - 64px);
+    justify-content: flex-start;
+  }
+
+  .hero__text {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 48px;
+    text-align: left;
+    max-width: none;
+  }
+
+  .hero__title {
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  .hero__info {
+    border-left: 1px solid var(--color-glass-border);
+    padding-left: 48px;
+    max-width: 536px;
+    margin: 0;
+    align-self: flex-start;
+    min-width: 0;
+  }
+
+  .hero__info p {
+    text-align: left;
+  }
+
+}
+
+@media (min-width: 1680px) {
+  .hero__redline-group {
+    /* см. комментарий у .hero__quote — компенсация зазора капнутой канвы */
+    right: calc(580px - max(0px, (var(--vw100, 100vw) - 1680px) / 2));
+  }
+}
+
+/* ==========================================================================
+   About block — "Что происходило пока ты отсутствовал"
+   Источник: Figma "BAZA DK 2.0", node 8:219 (Desktop) / 8:311 (Tablet) / 8:339 (Mobile)
+   В отличие от Hero — обычный поток документа, без fixed/absolute-canvas,
+   резиновая типографика на clamp() между 393→768, дальше — плоские
+   значения breakpoint'ов Tablet(768)/Desktop(1024), как в Hero.
+   ========================================================================== */
+
+.about {
+  position: relative;
+  background: var(--color-bg);
+  overflow: clip;
+}
+
+.about__inner {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 64px 16px;
+}
+
+.about__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.about__headlines {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.about__title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(32px, -1.536px + 8.5333vw, 64px);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+
+.about__title-row--accent {
+  color: var(--color-red);
+}
+
+/* ---- Видео + декоративная "капля" (Melt) под ним ---- */
+
+.about__video-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: -8px; /* на Mobile отступ до описания уже 16px, а не общий gap 24px */
+}
+
+.about__video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 856 / 480;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.about__video-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--color-bg);
+}
+
+.about__video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 12, 11, 0.24);
+  transition: opacity 0.3s ease;
+}
+
+.about__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(64px, -3.072px + 17.0667vw, 128px);
+  height: clamp(64px, -3.072px + 17.0667vw, 128px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 888px;
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.about__play:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.about__play-icon {
+  width: 40%;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+.about__video.is-playing .about__play,
+.about__video.is-playing .about__video-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* На Mobile "капля" в потоке, сразу под видео, без зазора */
+.about__line {
+  width: 64px;
+  aspect-ratio: 64 / 62;
+  margin: 0 auto;
+}
+
+.about__line-img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.about__line-img--mobile {
+  display: block;
+}
+
+/* ---- Текст-описание ---- */
+
+.about__description {
+  width: 100%;
+  color: var(--color-milk);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 11.52px + 2.6667vw, 32px);
+  line-height: clamp(24px, 13.52px + 2.6667vw, 34px);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ---- Статистика ---- */
+
+.about__stats {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.about__stat:nth-child(3),
+.about__stat:nth-child(4) {
+  margin-top: 8px;
+}
+
+.about__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  border-left: 1px solid var(--color-stat-divider);
+  border-right: 1px solid var(--color-stat-divider);
+}
+
+.about__stat-number {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--color-cream) 0%, transparent 84%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(56px, 14.08px + 10.6667vw, 96px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.about__stat-desc {
+  color: var(--color-milk);
+  opacity: 0.48;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  text-align: center;
+}
+
+/* ---- CTA-кнопка (тот же стиль, что и в Hero) ---- */
+
+.about__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 10px;
+  background: var(--color-red);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.about__button:hover {
+  background: var(--color-red-hover);
+  transform: scale(0.96);
+}
+
+.about__button span {
+  color: var(--color-white);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   About — Tablet (768–1023px)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .about__inner {
+    padding: 96px 32px;
+  }
+
+  .about__container {
+    gap: 48px;
+  }
+
+  .about__video-wrap {
+    margin-bottom: 0;
+  }
+
+  /* На Tablet+ "капля" — абсолютный оверлей под видео, не влияет на flow */
+  .about__line {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 168px;
+    aspect-ratio: 168 / 161;
+    margin: 0;
+  }
+
+  .about__line-img--mobile {
+    display: none;
+  }
+
+  .about__line-img--tablet {
+    display: block;
+  }
+
+  .about__stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .about__stat:nth-child(3),
+  .about__stat:nth-child(4) {
+    margin-top: 0;
+  }
+
+  .about__stat {
+    width: 50%;
+    padding: 32px 0;
+  }
+}
+
+/* ==========================================================================
+   About — Desktop (>=1024px)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .about__inner {
+    padding: 128px 32px;
+  }
+
+  .about__container {
+    max-width: 1080px;
+    margin: 0 auto;
+    gap: 48px;
+  }
+
+  .about__video-wrap {
+    width: 79.259%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about__line {
+    width: 240px;
+    aspect-ratio: 240 / 230;
+  }
+
+  .about__line-img--tablet {
+    display: none;
+  }
+
+  .about__line-img--desktop {
+    display: block;
+  }
+
+  .about__description {
+    max-width: 768px;
+    margin: 0 auto;
+    margin-bottom: 48px;
+  }
+
+  .about__stats {
+    flex-wrap: nowrap;
+  }
+
+  .about__stat {
+    width: 25%;
+    padding: 0;
+  }
+}
