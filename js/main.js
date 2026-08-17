@@ -95,6 +95,18 @@
 // физически подгоняем "En" под её фактический правый верхний угол — тогда
 // рассинхронизироваться им попросту нечем. Ниже 1024px — сбрасываем
 // инлайн-стили, "En" возвращается обычным пунктом внутри .hero__menu.
+//
+// .hero__quote — position:absolute (скроллится вместе со страницей, не
+// прижата к viewport навсегда), а "En" — position:fixed (координаты
+// относительно viewport). Поэтому синхронизации только на resize/load не
+// хватает: при скролле quote уезжает вверх экрана, а "En" остаётся на
+// месте — вот почему при рефреше на середине страницы "En" либо висел не
+// над карточкой, либо не был виден вовсе (застревал там, где посчитался
+// один раз при загрузке, а не там, где карточка оказалась после скролла).
+// Добавлен scroll-листener (throttled через requestAnimationFrame, чтобы
+// не пересчитывать на каждый пиксель скролла) — "En" теперь всегда
+// физически следует за карточкой, в том числе уезжает вместе с ней за
+// пределы экрана, когда Hero проскроллен.
 (function () {
   const langSwitch = document.querySelector(".hero__lang-switch");
   const quote = document.querySelector(".hero__quote");
@@ -120,9 +132,20 @@
     langSwitch.style.top = `${q.top}px`;
   }
 
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      syncLangSwitch();
+      ticking = false;
+    });
+  }
+
   syncLangSwitch();
   window.addEventListener("resize", syncLangSwitch);
   window.addEventListener("load", syncLangSwitch);
+  window.addEventListener("scroll", onScroll, { passive: true });
 })();
 
 // Redline-группа (красная линия + бейдж даты) и персонаж слегка следуют
