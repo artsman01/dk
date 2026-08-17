@@ -161,6 +161,13 @@
 
   function hidePopover() {
     popover.classList.remove("start__popover--visible");
+    // Сбрасываем инлайновую позицию — иначе спрятанный (но всё ещё
+    // visibility:hidden, а не display:none) поповер остаётся там, где его
+    // в последний раз поставил JS (например, left:803px при широком
+    // вьюпорте), и при уменьшении окна вылезает за границы страницы,
+    // создавая горизонтальный скролл.
+    popover.style.left = "";
+    popover.style.top = "";
   }
 
   function cancelHide() {
@@ -201,6 +208,11 @@
 
     popover.addEventListener("mouseenter", cancelHide);
     popover.addEventListener("mouseleave", scheduleHide);
+    window.addEventListener("resize", () => {
+      cancelShow();
+      cancelHide();
+      hidePopover();
+    });
   } else {
     cells.forEach((cell) => {
       cell.addEventListener("click", (e) => {
