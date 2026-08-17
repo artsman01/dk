@@ -1034,12 +1034,21 @@ p {
   margin-bottom: -8px; /* на Mobile отступ до описания уже 16px, а не общий gap 24px */
 }
 
+/* Весь блок — ссылка (см. HTML), поэтому кликабелен целиком, не только
+   иконка плей. Лёгкий zoom-out при наведении — тот же эффект, что у
+   .hero__quote-media при ховере на видео в Hero. */
 .about__video {
+  display: block;
   position: relative;
   width: 100%;
   aspect-ratio: 856 / 480;
   border-radius: 12px;
   overflow: hidden;
+  transition: transform 0.35s ease;
+}
+
+.about__video:hover {
+  transform: scale(0.97);
 }
 
 .about__video-media {
@@ -1076,7 +1085,10 @@ p {
   transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
-.about__play:hover {
+/* Триггер — ховер на весь .about__video (a-ссылку), не только на сам
+   кружок с иконкой — раньше увеличивался только при наведении именно
+   на кружок. */
+.about__video:hover .about__play {
   transform: translate(-50%, -50%) scale(1.05);
 }
 
@@ -1102,11 +1114,20 @@ p {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  /* Курсор проходит "сквозь" картинку — браузер не видит её под
+     наведением и не показывает свой ховер-виджет (Lens/Copilot и т.п.),
+     как и с картинками в Hero. */
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 /* ---- Текст-описание ---- */
 
 .about__description {
+  position: relative;
+  z-index: 1;
   width: 100%;
   color: var(--color-milk);
   font-family: var(--font-display);
@@ -1115,6 +1136,13 @@ p {
   line-height: clamp(24px, 13.52px + 2.6667vw, 34px);
   text-align: center;
   text-transform: uppercase;
+}
+
+/* Жёсткий перенос после "открытий," нужен только на Desktop — там
+   после него одиноко повисает "А" в конце строки; на Tablet/Mobile
+   текст просто переносится естественно. */
+.about__description-break {
+  display: none;
 }
 
 /* ---- Статистика ---- */
@@ -1188,6 +1216,18 @@ p {
 }
 
 /* ==========================================================================
+   About — Mobile-only (<768px)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* На мобилке разделители между плитками статистики не нужны совсем. */
+  .about__stat {
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* ==========================================================================
    About — Tablet (768–1023px)
    ========================================================================== */
 
@@ -1204,14 +1244,9 @@ p {
     margin-bottom: 0;
   }
 
-  /* На Tablet+ "капля" — абсолютный оверлей под видео, не влияет на flow.
-     z-index:-1 — иначе position:absolute красит её поверх обычного
-     статичного .about__description (позиционированные элементы всегда
-     красятся над non-positioned even, если z-index:auto), а нужно
-     наоборот — картинка должна быть ПОД текстом описания. */
+  /* На Tablet+ "капля" — абсолютный оверлей под видео, не влияет на flow. */
   .about__line {
     position: absolute;
-    z-index: -1;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
@@ -1230,9 +1265,24 @@ p {
     margin-top: 0;
   }
 
+  /* Сетка 2×2: только внутренний вертикальный разделитель между
+     колонками (border-right у левой колонки — 1px, не задвоенный
+     1+1=2px), без обводки по внешним краям, плюс горизонтальная линия
+     между 1 и 2 рядом плиток (border-top у нижнего ряда). */
   .about__stat {
     width: 50%;
     padding: 32px 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .about__stat:nth-child(odd) {
+    border-right: 1px solid var(--color-stat-divider);
+  }
+
+  .about__stat:nth-child(3),
+  .about__stat:nth-child(4) {
+    border-top: 1px solid var(--color-stat-divider);
   }
 }
 
@@ -1267,12 +1317,25 @@ p {
     margin-bottom: 48px;
   }
 
+  .about__description-break {
+    display: inline;
+  }
+
   .about__stats {
     flex-wrap: nowrap;
   }
 
+  /* Только внутренние разделители (3 шт. между 4 карточками), без
+     обводки по краям крайних карточек, и без задвоения 1+1=2px между
+     соседними — только border-right, у последней его тоже нет. */
   .about__stat {
     width: 25%;
     padding: 0;
+    border-left: none;
+    border-right: 1px solid var(--color-stat-divider);
+  }
+
+  .about__stat:last-child {
+    border-right: none;
   }
 }
