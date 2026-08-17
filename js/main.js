@@ -85,6 +85,46 @@
   window.addEventListener("resize", setRealVw);
 })();
 
+// "En" (.hero__lang-switch) на Desktop должен сидеть строго в углу
+// quote-карточки. CSS даёт только приблизительный fallback (position:fixed,
+// top/right:32px) — формула-в-формулу с .hero__quote (у которой ширина и
+// позиция зависят от --vw100 и центрирования канвы) ненадёжна: "En" вложен
+// в .hero__brand, а .hero__quote — в .hero__inner, это два независимых
+// вычисления, и на resize/до первого кадра они могли разъезжаться.
+// Здесь просто читаем реальный getBoundingClientRect() у .hero__quote и
+// физически подгоняем "En" под её фактический правый верхний угол — тогда
+// рассинхронизироваться им попросту нечем. Ниже 1024px — сбрасываем
+// инлайн-стили, "En" возвращается обычным пунктом внутри .hero__menu.
+(function () {
+  const langSwitch = document.querySelector(".hero__lang-switch");
+  const quote = document.querySelector(".hero__quote");
+  if (!langSwitch || !quote) return;
+
+  const isDesktop = window.matchMedia("(min-width: 1024px)");
+
+  function syncLangSwitch() {
+    if (!isDesktop.matches) {
+      langSwitch.style.left = "";
+      langSwitch.style.right = "";
+      langSwitch.style.top = "";
+      return;
+    }
+    const q = quote.getBoundingClientRect();
+    const enWidth = langSwitch.getBoundingClientRect().width;
+    // right тоже надо сбросить: если оставить CSS-шный right:32px рядом с
+    // JS-шным left, у position:fixed элемента с width:auto браузер
+    // растянет его на весь промежуток между ними вместо естественной
+    // ширины пилюли.
+    langSwitch.style.right = "auto";
+    langSwitch.style.left = `${q.right - enWidth}px`;
+    langSwitch.style.top = `${q.top}px`;
+  }
+
+  syncLangSwitch();
+  window.addEventListener("resize", syncLangSwitch);
+  window.addEventListener("load", syncLangSwitch);
+})();
+
 // Redline-группа (красная линия + бейдж даты) и персонаж слегка следуют
 // за курсором по горизонтали — небольшой параллакс, персонаж двигается
 // в противоположную сторону от redline. Диапазон движения ограничен.

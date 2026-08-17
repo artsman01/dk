@@ -946,14 +946,18 @@ p {
 
   /* Только на Desktop "En" уходит из общего меню (там на Desktop оно в
      потоке рядом с лого, см. базовое правило .hero__menu) и садится в
-     тот же прижатый к углу фикс. 32/32, что и quote-карточка — поверх
-     неё (z-index больше, чем 45 у .hero__quote). right:32px тут ФИКС.,
-     без компенсации центрирования канвы (та формула у .hero__quote нужна
-     только position:absolute-элементам внутри .hero__inner с его
-     max-width:1680px — у position:fixed контейнер и так настоящий
-     viewport, поэтому 32px уже верно на любой ширине, включая >1680px).
-     На Tablet/Mobile этот блок не применяется — там "En" остаётся обычным
-     пунктом внутри .hero__menu вместе с остальными двумя. */
+     угол quote-карточки — поверх неё (z-index больше, чем 45 у
+     .hero__quote). position:fixed тут — просто дефолт/фолбэк на случай,
+     если JS ещё не отработал; РЕАЛЬНУЮ позицию (left/top) под каждый
+     resize синхронизирует main.js, копируя фактический getBoundingClientRect()
+     у .hero__quote — так "En" физически не может разъехаться с карточкой
+     (общая формула right:calc(...) через два независимых источника
+     координат — fixed=viewport, .hero__quote=position:absolute внутри
+     .hero__inner — этого не гарантировала: DOM "En" вложен в
+     .hero__brand{position:fixed}, из-за чего position:absolute на "En"
+     резолвился бы вообще не в .hero__inner, а в .hero__brand). На
+     Tablet/Mobile блок не применяется — там "En" обычный пункт внутри
+     .hero__menu, JS-синхронизация тоже отключена (см. main.js). */
   .hero__lang-switch {
     position: fixed;
     z-index: 50;
