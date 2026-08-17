@@ -1503,34 +1503,28 @@ p {
   gap: 16px;
 }
 
+/* Все три кнопки ("Подробнее" под Бонус стартом + "Подробнее"/"Поддержка"
+   в карточках-витринах) — одинаковая стеклянная кнопка, фикс 14/20
+   семиболд (не резиновый — этим трём кнопкам не нужно тянуться). */
 .start__more,
 .start__showcase-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--color-cream);
-  font-family: var(--font-text);
-  font-weight: 600;
-  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
-  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
-  transition: color 0.2s ease;
-}
-
-/* "Подробнее"/"Поддержка" внутри карточек-витрин — стеклянная кнопка
-   (не просто текст-ссылка, как .start__more), по Figma. */
-.start__showcase-btn {
   height: 36px;
   padding: 0 8px 0 16px;
   border-radius: 8px;
   background: var(--color-glass-bg);
   border: 1px solid var(--color-glass-border);
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
   transition: border-color 0.2s ease;
 }
 
-.start__more:hover {
-  color: var(--color-white);
-}
-
+.start__more:hover,
 .start__showcase-btn:hover {
   border-color: var(--color-cream);
 }
