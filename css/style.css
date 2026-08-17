@@ -273,7 +273,10 @@ p {
 .hero__artwork {
   position: relative;
   width: 100%;
-  aspect-ratio: 1725 / 1798;
+  /* На Mobile/Tablet (<1024px) — укороченная по высоте версия персонажа
+     (dk-short.png), на Desktop — полная (см. override ниже и
+     переключение картинок через --short/--full). */
+  aspect-ratio: 1291 / 785;
   overflow: hidden;
   transform: translateX(var(--parallax-x-char, 0px));
   transition: transform 0.2s ease-out;
@@ -286,12 +289,17 @@ p {
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
+  display: none;
   /* Отключаем нативный ховер-виджет браузера (Lens/Copilot и т.п.) и любые
      действия с картинкой — курсор проходит "сквозь" img к родителю. */
   pointer-events: none;
   -webkit-user-drag: none;
   user-select: none;
   -webkit-touch-callout: none;
+}
+
+.hero__artwork-img--short {
+  display: block;
 }
 
 /* Растянут на всю ширину хиро-блока (не только под артворком) — вынесен
@@ -309,7 +317,9 @@ p {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 44.28vw;
+  /* Пересчитано под укороченный dk-short.png (785:1291, было 1798:1725) —
+     та же доля (46.34%) от новой, более короткой высоты персонажа. */
+  height: 25.83vw;
   background: linear-gradient(
     to top,
     rgba(13, 12, 11, 1) 0%,
@@ -355,26 +365,17 @@ p {
   align-items: center;
   justify-content: center;
   width: 112px;
-  height: 32px;
+  /* date-container.png — 384:96 = 4:1, единая картинка вместо старой
+     склейки из двух половинок */
+  aspect-ratio: 4 / 1;
 }
 
 .hero__date-split-bg {
   position: absolute;
-  top: 0;
-  width: 50%;
+  inset: 0;
+  width: 100%;
   height: 100%;
-}
-
-.hero__date-split-bg--left {
-  left: 0;
-}
-
-.hero__date-split-bg--right {
-  right: 0;
-}
-
-.hero__date-split-bg--tablet {
-  display: none;
+  object-fit: fill;
 }
 
 .hero__date-split-text {
@@ -616,21 +617,12 @@ p {
 
   .hero__date-split {
     width: 192px;
-    height: 48px;
     bottom: 6.19%;
   }
 
   .hero__date-split-text {
     font-size: 20px;
     line-height: 24px;
-  }
-
-  .hero__date-split-bg--mobile {
-    display: none;
-  }
-
-  .hero__date-split-bg--tablet {
-    display: block;
   }
 
   /* border-left/padding-left тут не нужны — это разделитель для
@@ -670,10 +662,29 @@ p {
   .hero__info {
     max-width: 536px;
     height: auto;
+    margin: 0 auto;
   }
 
   .hero__text {
     gap: 24px;
+  }
+
+  /* Меню отдельно от лого — прижато к правому верхнему углу, лого
+     остаётся слева (см. .hero__brand). На мобилке позже будет отдельно
+     переделано. */
+  .hero__menu {
+    position: fixed;
+    z-index: 50;
+    top: 32px;
+    right: 32px;
+  }
+
+  /* CTA-блок отцентрован по горизонтали (не прижат к правому краю) —
+     на мобилке позже будет отдельно переделано. */
+  .hero__cta {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
   }
 }
 
@@ -762,6 +773,14 @@ p {
   .hero__artwork {
     width: 100%;
     aspect-ratio: 1725 / 1798;
+  }
+
+  .hero__artwork-img--short {
+    display: none;
+  }
+
+  .hero__artwork-img--full {
+    display: block;
   }
 
   .hero__artwork-gradient {
