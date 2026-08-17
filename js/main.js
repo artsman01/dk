@@ -54,3 +54,26 @@
     }, 100);
   }
 })();
+
+// Айтем-грид: на тач-устройствах (Mobile/Tablet) нет :hover — тултип по
+// тапу вместо этого (класс .is-active, та же CSS-стилизация, что у
+// :hover). Повторный тап по той же ячейке или тап вне грида — закрывает.
+(function () {
+  const cells = document.querySelectorAll(".start__cell--filled");
+  if (!cells.length) return;
+
+  cells.forEach((cell) => {
+    cell.addEventListener("click", (e) => {
+      const wasActive = cell.classList.contains("is-active");
+      cells.forEach((c) => c.classList.remove("is-active"));
+      if (!wasActive) {
+        cell.classList.add("is-active");
+        e.stopPropagation();
+      }
+    });
+  });
+
+  document.addEventListener("click", () => {
+    cells.forEach((c) => c.classList.remove("is-active"));
+  });
+})();
