@@ -735,6 +735,51 @@ p {
 }
 
 /* ==========================================================================
+   Mobile-only overrides (<768px) — идут ПОСЛЕ общего max-width:1023px
+   блока выше, чтобы корректно его перебить именно в этом диапазоне
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Персонаж и DEATH KNIGHT (100% от wrap) — во всю ширину контейнера,
+     не 64.17% как на Tablet/выше. */
+  .hero__artwork-wrap {
+    width: 100%;
+  }
+
+  /* Начиная с этого разрешения все боковые отступы — 16px, не 32px. */
+  .hero__menu {
+    top: 16px;
+    right: 16px;
+  }
+
+  /* CTA — точно такой же, как на Tablet+ (стеклянная карточка-ряд,
+     центрирована по горизонтали — центрирование уже задано общим
+     max-width:1023px блоком выше, left:50%/transform тут трогать не
+     нужно). min(400px, 100vw-32px) — не переполняет очень узкие
+     экраны, но выглядит как 400px на большинстве телефонов. */
+  .hero__cta {
+    bottom: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: min(400px, calc(100vw - 32px));
+    min-height: 64px;
+    padding: 8px 8px 8px 16px;
+    border-radius: 12px;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(10.8px);
+    -webkit-backdrop-filter: blur(10.8px);
+  }
+
+  .hero__cta-text {
+    text-align: left;
+    color: rgba(213, 201, 189, 0.64);
+  }
+}
+
+/* ==========================================================================
    Desktop (>=1024px) — absolute canvas layout, 1:1 с Figma (1680×980)
    ========================================================================== */
 
