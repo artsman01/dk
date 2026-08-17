@@ -324,6 +324,22 @@ p {
   transform: scale(0.96);
 }
 
+/* Языковой переключатель — обычный пункт .hero__menu (третий, рядом с
+   лого), только цвета как у .registration__download: крем-фон/тёмный
+   текст по умолчанию, красный/белый на ховере — вместо стандартной
+   "стеклянной" схемы .hero__menu-item. */
+.hero__lang-switch {
+  background: var(--color-cream);
+  border-color: var(--color-cream);
+  color: var(--color-bg);
+}
+
+.hero__lang-switch:hover {
+  background: var(--color-red);
+  border-color: var(--color-red);
+  color: var(--color-white);
+}
+
 /* ---- Redline-group: красная линия + бейдж даты — единый блок.
    Absolute внутри .hero__inner (не fixed — скроллится вместе с Hero,
    не остаётся поверх следующих блоков), растянут по всей высоте канвы
@@ -942,27 +958,6 @@ p {
        KNIGHT на невысоких окнах (1280×720, 1366×768, 1645×847). */
     width: clamp(220px, calc(46.5px + 0.18902 * var(--vw100, 100vw)), 364px);
     margin: 0;
-  }
-
-  /* Только на Desktop "En" уходит из общего меню (там на Desktop оно в
-     потоке рядом с лого, см. базовое правило .hero__menu) и садится в
-     угол quote-карточки — поверх неё (z-index больше, чем 45 у
-     .hero__quote). position:fixed тут — просто дефолт/фолбэк на случай,
-     если JS ещё не отработал; РЕАЛЬНУЮ позицию (left/top) под каждый
-     resize синхронизирует main.js, копируя фактический getBoundingClientRect()
-     у .hero__quote — так "En" физически не может разъехаться с карточкой
-     (общая формула right:calc(...) через два независимых источника
-     координат — fixed=viewport, .hero__quote=position:absolute внутри
-     .hero__inner — этого не гарантировала: DOM "En" вложен в
-     .hero__brand{position:fixed}, из-за чего position:absolute на "En"
-     резолвился бы вообще не в .hero__inner, а в .hero__brand). На
-     Tablet/Mobile блок не применяется — там "En" обычный пункт внутри
-     .hero__menu, JS-синхронизация тоже отключена (см. main.js). */
-  .hero__lang-switch {
-    position: fixed;
-    z-index: 50;
-    top: 32px;
-    right: 32px;
   }
 
   /* На Desktop редлайн держится за персонажа в % от канвы (34.524% —
