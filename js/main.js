@@ -55,27 +55,100 @@
   }
 })();
 
-// Айтем-грид: на тач-устройствах (Mobile/Tablet) нет :hover — тултип по
-// тапу вместо этого (класс .is-active, та же CSS-стилизация, что у
-// :hover). Повторный тап по той же ячейке или тап вне грида — закрывает.
+// Айтем-грид: общий поповер (.start__popover) на все занятые ячейки.
+// position:absolute + координаты с поправкой на скролл (а не position:fixed)
+// — если длинная карточка не помещается в экран, она просто уходит за его
+// пределы, к ней докручивают страницей, а не крутят скролл внутри самого
+// поповера. Сторона (сверху/снизу от ячейки) выбирается по тому, где
+// целиком помещается поповер; если не помещается целиком ни там, ни там —
+// берётся сторона с большим запасом места. На устройствах с ховером —
+// курсор может перейти с ячейки на сам поповер (выделить текст, нажать
+// "Подробнее") без того, чтобы поповер спрятался: скрытие откладывается на
+// 150мс и отменяется, если курсор зашёл на ячейку/поповер за это время. На
+// тач — тап по ячейке (повторный тап по той же ячейке или тап вне грида
+// закрывает).
 (function () {
   const cells = document.querySelectorAll(".start__cell--filled");
-  if (!cells.length) return;
+  const popover = document.getElementById("startPopover");
+  if (!cells.length || !popover) return;
 
-  cells.forEach((cell) => {
-    cell.addEventListener("click", (e) => {
-      const wasActive = cell.classList.contains("is-active");
-      cells.forEach((c) => c.classList.remove("is-active"));
-      if (!wasActive) {
-        cell.classList.add("is-active");
-        e.stopPropagation();
-      }
+  const EDGE_GAP = 8;
+  let hideTimer = null;
+
+  function positionPopover(cell) {
+    const cellRect = cell.getBoundingClientRect();
+    const popoverRect = popover.getBoundingClientRect();
+
+    const spaceAbove = cellRect.top;
+    const spaceBelow = window.innerHeight - cellRect.bottom;
+    const fitsAbove = spaceAbove >= popoverRect.height + EDGE_GAP;
+    const fitsBelow = spaceBelow >= popoverRect.height + EDGE_GAP;
+    const placeBelow = fitsBelow || (!fitsAbove && spaceBelow > spaceAbove);
+
+    let left = cellRect.left + cellRect.width / 2 - popoverRect.width / 2;
+    left = Math.max(EDGE_GAP, Math.min(left, window.innerWidth - popoverRect.width - EDGE_GAP));
+
+    const top = placeBelow
+      ? cellRect.bottom + EDGE_GAP
+      : Math.max(EDGE_GAP, cellRect.top - EDGE_GAP - popoverRect.height);
+
+    popover.style.left = `${left + window.scrollX}px`;
+    popover.style.top = `${top + window.scrollY}px`;
+  }
+
+  function showPopover(cell) {
+    positionPopover(cell);
+    popover.classList.add("start__popover--visible");
+  }
+
+  function hidePopover() {
+    popover.classList.remove("start__popover--visible");
+  }
+
+  function cancelHide() {
+    if (hideTimer) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+  }
+
+  function scheduleHide() {
+    cancelHide();
+    hideTimer = setTimeout(hidePopover, 150);
+  }
+
+  if (window.matchMedia("(hover: hover)").matches) {
+    cells.forEach((cell) => {
+      cell.addEventListener("mouseenter", () => {
+        cancelHide();
+        showPopover(cell);
+      });
+      cell.addEventListener("mouseleave", scheduleHide);
     });
-  });
 
-  document.addEventListener("click", () => {
-    cells.forEach((c) => c.classList.remove("is-active"));
-  });
+    popover.addEventListener("mouseenter", cancelHide);
+    popover.addEventListener("mouseleave", scheduleHide);
+  } else {
+    cells.forEach((cell) => {
+      cell.addEventListener("click", (e) => {
+        const wasActive = cell.classList.contains("is-active");
+        cells.forEach((c) => c.classList.remove("is-active"));
+        hidePopover();
+        if (!wasActive) {
+          cell.classList.add("is-active");
+          showPopover(cell);
+          e.stopPropagation();
+        }
+      });
+    });
+
+    popover.addEventListener("click", (e) => e.stopPropagation());
+
+    document.addEventListener("click", () => {
+      cells.forEach((c) => c.classList.remove("is-active"));
+      hidePopover();
+    });
+  }
 })();
 
 // Форма регистрации: глазик переключает type инпута password/text у
@@ -109,5 +182,36 @@
         input.classList.toggle("registration__input--error", !input.checkValidity());
       });
     });
+  });
+})();
+
+// Футер: 4-я колонка ("Ignis chat", .footer__item--default) активна по
+// умолчанию. На устройствах с ховером — ховер над любой колонкой делает
+// активной её, снимая подсветку с остальных; при уходе курсора со всего
+// списка активность возвращается на 4-ю. На тач-устройствах (нет hover)
+// слушатели не вешаем — 4-я остаётся активной всегда, стили для этого уже
+// в CSS (.footer__item--default на Mobile).
+(function () {
+  const list = document.querySelector(".footer__list");
+  if (!list) return;
+
+  const items = list.querySelectorAll(".footer__item");
+  const defaultItem = list.querySelector(".footer__item--default");
+  if (!defaultItem) return;
+
+  defaultItem.classList.add("footer__item--active");
+
+  if (!window.matchMedia("(hover: hover)").matches) return;
+
+  items.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      items.forEach((i) => i.classList.remove("footer__item--active"));
+      item.classList.add("footer__item--active");
+    });
+  });
+
+  list.addEventListener("mouseleave", () => {
+    items.forEach((i) => i.classList.remove("footer__item--active"));
+    defaultItem.classList.add("footer__item--active");
   });
 })();
