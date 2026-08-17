@@ -200,9 +200,11 @@
           <!-- ==================================================================
                Айтем-грид — для программиста.
                .start__cell — слот 56×56, пустой по умолчанию, ничего не рендерит.
-               Чтобы положить айтем внутрь — добавь класс .start__cell--filled и
-               внутри .start__item:
-                 <div class="start__cell start__cell--filled">
+               Чтобы положить айтем внутрь — добавь класс .start__cell--filled,
+               атрибут data-tooltip (текст всплывающей подсказки при ховере —
+               сейчас заглушка-стиль, дизайн тултипа обновим позже) и внутри
+               .start__item:
+                 <div class="start__cell start__cell--filled" data-tooltip="Название айтема">
                    <div class="start__item">
                      <img class="start__item-icon" src="ссылка-иконки-айтема.png" alt="" />
                      <img class="start__item-frame" src="ссылка-рамки.png" alt="" />   (необязательно — рамка/рарность поверх иконки)
@@ -215,109 +217,109 @@
                сетку дальше, ничего ломать не нужно.
                ================================================================== -->
           <div class="start__grid">
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 1">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-1.png" alt="" />
                 <span class="start__item-qty">99+</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 2">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-2.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-lv.png" alt="" />
                 <span class="start__item-qty">2</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 3">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-3.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-event.png" alt="" />
                 <span class="start__item-qty">99+</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 4">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-4.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-event.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 5">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-5.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-lv.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 6">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-6.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 7">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-7.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-event.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 8">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-8.png" alt="" />
                 <span class="start__item-qty">10</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 9">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-9.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 10">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-10.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-lv.png" alt="" />
                 <span class="start__item-qty">2</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 11">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-11.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-event.png" alt="" />
                 <span class="start__item-qty">99+</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 12">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-12.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 13">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-13.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-lv.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 14">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-14.png" alt="" />
                 <span class="start__item-qty">99+</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 15">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-15.png" alt="" />
                 <img class="start__item-frame" src="assets/img/item-frame-event.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 16">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-16.png" alt="" />
                 <span class="start__item-qty">10</span>
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 17">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-17.png" alt="" />
               </div>
             </div>
-            <div class="start__cell start__cell--filled">
+            <div class="start__cell start__cell--filled" data-tooltip="Айтем 18">
               <div class="start__item">
                 <img class="start__item-icon" src="assets/img/items/item-18.png" alt="" />
               </div>
@@ -356,7 +358,7 @@
           <div class="start__showcase-col">
             <div class="start__showcase-media">
               <div class="start__showcase-line" aria-hidden="true">
-                <img src="assets/img/start-line.png" alt="" />
+                <img src="assets/img/red-dwarf.png" alt="" />
               </div>
               <img src="assets/img/start-migration-char.png" alt="" class="start__showcase-char" />
             </div>
