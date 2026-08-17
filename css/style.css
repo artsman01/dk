@@ -56,10 +56,9 @@ a {
 
 /* --------------------------------------------------------------------
    Прелоадер — держит страницу закрытой, пока не догрузятся все картинки
-   и видео (см. main.js), чтобы контент не появлялся кусками. Персонаж на
-   фоне — декоративный, тихо мерцает (opacity), поверх него радиальный
-   градиент, растворяющий картинку в фон по краям. Лого статично, бар и
-   процент — реальный прогресс загрузки медиа на странице.
+   и видео (см. main.js), чтобы контент не появлялся кусками. Просто
+   статичное лого по центру, без прогресса — плавно исчезает, когда всё
+   готово.
    -------------------------------------------------------------------- */
 
 .preloader {
@@ -70,7 +69,6 @@ a {
   align-items: center;
   justify-content: center;
   background: var(--color-bg);
-  overflow: hidden;
   opacity: 1;
   visibility: visible;
   transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -82,88 +80,10 @@ a {
   pointer-events: none;
 }
 
-.preloader__character {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(564px, 70vw);
-  aspect-ratio: 846 / 848;
-  animation: preloader-flicker 4s ease-in-out infinite;
-}
-
-.preloader__character::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, transparent 0%, var(--color-bg) 100%);
-}
-
-.preloader__character img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  -webkit-user-drag: none;
-  user-select: none;
-}
-
-@keyframes preloader-flicker {
-  0%,
-  100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .preloader__character {
-    animation: none;
-    opacity: 0.25;
-  }
-}
-
-.preloader__content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-}
-
 .preloader__logo {
   display: block;
   width: 34px;
   height: 48px;
-}
-
-.preloader__bar {
-  width: 212px;
-  height: 4px;
-  border-radius: 88px;
-  background: rgba(213, 201, 189, 0.08);
-  overflow: hidden;
-}
-
-.preloader__bar-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 88px;
-  background: var(--color-red);
-  transition: width 0.2s ease-out;
-}
-
-.preloader__percent {
-  color: var(--color-white);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  text-align: center;
 }
 
 h1,
@@ -1478,6 +1398,18 @@ p {
   height: 32px;
 }
 
+/* Лишний хвост под футером только на мобилке — фикс. CTA (.hero__cta)
+   там иначе перекрывает последний пункт соцсетей (см. .hero__cta). */
+.section-spacer--mobile-only {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .section-spacer--mobile-only {
+    display: block;
+  }
+}
+
 .start {
   position: relative;
   background: var(--color-bg);
@@ -1721,6 +1653,14 @@ p {
    position:fixed — не зависит от скролла/переполнения родителя. */
 .start__popover {
   position: absolute;
+  /* Без явных top/left браузер сам вычисляет "статичную" позицию — там,
+     где элемент был бы в обычном потоке, т.е. в самом низу страницы
+     (после всех спейсеров). Он невидим (opacity/visibility), но всё
+     равно 574px высотой — это раздувало scrollHeight страницы огромным
+     пустым хвостом внизу. top:0/left:0 фиксирует точку отсчёта, JS
+     дальше двигает через inline style при показе (см. main.js). */
+  top: 0;
+  left: 0;
   z-index: 30;
   width: 276px;
   display: flex;
