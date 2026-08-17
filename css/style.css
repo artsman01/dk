@@ -1383,7 +1383,7 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
+  gap: 24px;
 }
 
 /* ---- Заголовок ---- */
@@ -1739,6 +1739,10 @@ p {
 @media (min-width: 768px) {
   .start__inner {
     padding: 32px;
+  }
+
+  .start__container {
+    gap: 48px;
   }
 
   /* Резиновый на всю ширину контейнера, без max-width — тот же принцип,
