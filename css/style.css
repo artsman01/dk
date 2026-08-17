@@ -101,6 +101,29 @@ p {
 
   --font-display: "Akrobat", "Arial Narrow", sans-serif;
   --font-text: "Inter Tight", "Segoe UI", Arial, sans-serif;
+
+  /* Плавный фейд из непрозрачного bg в прозрачный (см. .hero__artwork-gradient
+     и .hero__artwork-gradient-mobile) — многостопый, чтобы не было
+     banding-полос на тёмном (глаз нелинейно чувствителен к тёмным тонам). */
+  --fade-gradient: linear-gradient(
+    to top,
+    rgba(13, 12, 11, 1) 0%,
+    rgba(13, 12, 11, 0.987) 8.1%,
+    rgba(13, 12, 11, 0.951) 15.5%,
+    rgba(13, 12, 11, 0.896) 22.5%,
+    rgba(13, 12, 11, 0.825) 29%,
+    rgba(13, 12, 11, 0.741) 35.3%,
+    rgba(13, 12, 11, 0.648) 41.2%,
+    rgba(13, 12, 11, 0.55) 47.1%,
+    rgba(13, 12, 11, 0.45) 52.9%,
+    rgba(13, 12, 11, 0.352) 58.8%,
+    rgba(13, 12, 11, 0.259) 64.7%,
+    rgba(13, 12, 11, 0.175) 70.9%,
+    rgba(13, 12, 11, 0.104) 77.4%,
+    rgba(13, 12, 11, 0.049) 84.4%,
+    rgba(13, 12, 11, 0.013) 91.8%,
+    rgba(13, 12, 11, 0) 100%
+  );
 }
 
 /* ==========================================================================
@@ -118,7 +141,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 128px 16px 16px;
+  padding: 96px 16px 16px;
 }
 
 /* ---- Brand group: лого + меню вместе, одной группой у левого края,
@@ -260,7 +283,10 @@ p {
 
 .hero__artwork-wrap {
   position: relative;
-  width: 91.665%;
+  /* На <1024px персонаж был слишком крупным — уменьшен на 30%
+     (91.665% * 0.7 ≈ 64.17%); на Desktop этот width переопределяется
+     на 100% (см. ниже), сюда не относится. */
+  width: 64.17%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -311,35 +337,54 @@ p {
    linear-gradient даёт видимые полосы (banding) на тёмном — глаз
    нелинейно чувствителен к тёмным тонам. Промежуточные стопы по
    easing-кривой (не линейно) убирают полосатость. */
+/* Только Desktop (>=1024px) — растянут во всю ширину экрана, привязан к
+   низу канвы (там персонаж и так bottom-anchored на весь экран, так что
+   низ канвы = низ персонажа). На Mobile/Tablet свой отдельный градиент,
+   см. .hero__artwork-gradient-mobile — там персонаж не во весь экран, и
+   этот вариант некорректно фейдил бы низ страницы, а не низ картинки. */
 .hero__artwork-gradient {
+  display: none;
   position: absolute;
   z-index: 3;
   left: 0;
   right: 0;
   bottom: 0;
-  /* Пересчитано под укороченный dk-short.png (785:1291, было 1798:1725) —
-     та же доля (46.34%) от новой, более короткой высоты персонажа. */
   height: 25.83vw;
-  background: linear-gradient(
-    to top,
-    rgba(13, 12, 11, 1) 0%,
-    rgba(13, 12, 11, 0.987) 8.1%,
-    rgba(13, 12, 11, 0.951) 15.5%,
-    rgba(13, 12, 11, 0.896) 22.5%,
-    rgba(13, 12, 11, 0.825) 29%,
-    rgba(13, 12, 11, 0.741) 35.3%,
-    rgba(13, 12, 11, 0.648) 41.2%,
-    rgba(13, 12, 11, 0.55) 47.1%,
-    rgba(13, 12, 11, 0.45) 52.9%,
-    rgba(13, 12, 11, 0.352) 58.8%,
-    rgba(13, 12, 11, 0.259) 64.7%,
-    rgba(13, 12, 11, 0.175) 70.9%,
-    rgba(13, 12, 11, 0.104) 77.4%,
-    rgba(13, 12, 11, 0.049) 84.4%,
-    rgba(13, 12, 11, 0.013) 91.8%,
-    rgba(13, 12, 11, 0) 100%
-  );
+  background: var(--fade-gradient);
   pointer-events: none;
+}
+
+/* Только Mobile/Tablet — absolute-ребёнок .hero__artwork (bottom:0
+   привязан ровно к низу картинки персонажа, а не страницы — dk-short.png
+   "обрезан" по высоте, градиент маскирует этот обрез). Полная ширина
+   экрана через left:50%+width:100vw+translateX(-50%) — работает точно,
+   т.к. .hero__artwork сам всегда центрирован относительно экрана
+   (91.665%-box с margin:0 auto внутри непадженного .hero__inner). */
+.hero__artwork-gradient-mobile {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  /* Разрешаем градиенту "выехать" за пределы узкой (91.665% экрана)
+     артворк-коробки на всю ширину экрана — сама картинка персонажа
+     всё равно не переполняет box (aspect-ratio точно совпадает с
+     dk-short.png), так что ничего лишнего не вылезет. */
+  .hero__artwork {
+    overflow: visible;
+  }
+
+  .hero__artwork-gradient-mobile {
+    display: block;
+    position: absolute;
+    z-index: 3;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    height: 25.83vw;
+    background: var(--fade-gradient);
+    pointer-events: none;
+  }
 }
 
 /* На Mobile/Tablet вордмарк идёт отдельным блоком СРАЗУ ПОД артворком (не поверх).
@@ -358,6 +403,7 @@ p {
 
 .hero__date-split {
   position: absolute;
+  z-index: 4;
   left: 50%;
   bottom: 8.05%;
   transform: translateX(-50%);
@@ -784,6 +830,7 @@ p {
   }
 
   .hero__artwork-gradient {
+    display: block;
     height: 18.03vw;
   }
 
