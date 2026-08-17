@@ -23,6 +23,19 @@
 </head>
 <body>
 
+  <div class="preloader" id="preloader" role="status" aria-live="polite">
+    <div class="preloader__character" aria-hidden="true">
+      <img src="assets/img/DK-preloader.png" alt="" draggable="false" />
+    </div>
+    <div class="preloader__content">
+      <img class="preloader__logo" src="assets/img/hero-logo.svg" alt="" width="34" height="48" />
+      <div class="preloader__bar">
+        <div class="preloader__bar-fill" id="preloaderFill"></div>
+      </div>
+      <p class="preloader__percent" id="preloaderPercent">0%</p>
+    </div>
+  </div>
+
   <div class="noise-overlay" id="noiseOverlay" aria-hidden="true"></div>
 
   <section class="hero" id="hero">
@@ -554,6 +567,7 @@
     </div>
   </section>
 
+  <div class="section-spacer" aria-hidden="true"></div>
   <div class="section-spacer" aria-hidden="true"></div>
 
   <!-- ==================================================================
