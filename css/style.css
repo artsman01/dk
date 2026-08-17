@@ -1741,15 +1741,17 @@ p {
     grid-template-columns: repeat(6, 56px);
   }
 
+  /* На Tablet (768–1023px) карточки идут в ряд, растянуты на всю ширину
+     контейнера и одинаковой высоты (align-items:stretch) — как только
+     они переходят в столбик (Mobile, <768px), высота снова своя у
+     каждой (там .start__showcase остаётся column из базового правила). */
   .start__showcase {
     flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: stretch;
   }
 
   .start__showcase-col {
     flex: 1;
-    max-width: 340px;
   }
 }
 
