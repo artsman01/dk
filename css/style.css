@@ -1348,3 +1348,426 @@ p {
     border-top: none;
   }
 }
+
+/* ==========================================================================
+   Start block — "Энеми стартует как мамка скажет, ты стартуешь как карта ляжет"
+   Источник: Figma "BAZA DK 2.0", node 13:1077 (Desktop) / 13:1531 (Tablet) / 13:1661 (Mobile)
+   Структура как у About: mobile-first fluid до 768, дальше — Tablet/Desktop
+   плоские значения. Айтем-грид — см. подробный комментарий в index.html,
+   ключевое требование — расширяемость (программист добавляет свои
+   иконки/рамки/количество в пустые .start__cell).
+   ========================================================================== */
+
+.start {
+  position: relative;
+  background: var(--color-bg);
+  overflow: clip;
+}
+
+.start__inner {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 64px 16px;
+}
+
+.start__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+/* ---- Заголовок ---- */
+
+.start__headlines {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.start__title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(32px, -1.536px + 8.5333vw, 64px);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+
+.start__title-row--accent {
+  color: var(--color-red);
+}
+
+.start__subtitle {
+  width: 100%;
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(16px, 13.904px + 0.5333vw, 18px);
+  line-height: clamp(26px, 23.904px + 0.5333vw, 28px);
+  text-align: center;
+}
+
+/* ---- "Бонус старт" — карточка с айтем-грид ---- */
+
+.start__pack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.start__pack-title {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 7.04px + 5.3333vw, 48px);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.start__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 56px);
+  border: 1px solid var(--color-stat-divider);
+  justify-content: center;
+}
+
+.start__cell {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  margin: -0.5px;
+}
+
+.start__item {
+  position: absolute;
+  inset: 4px;
+}
+
+.start__item-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.start__item-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.start__item-qty {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 14px;
+  text-shadow: 0 1px 2px rgba(13, 12, 11, 0.8);
+}
+
+.start__pack-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.start__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.start__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px 0 8px;
+  border-radius: 888px;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(10.8px);
+  -webkit-backdrop-filter: blur(10.8px);
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.2s ease;
+}
+
+.start__filter:hover {
+  border-color: var(--color-cream);
+}
+
+.start__filter-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.start__more,
+.start__showcase-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  transition: color 0.2s ease;
+}
+
+.start__more:hover,
+.start__showcase-btn:hover {
+  color: var(--color-white);
+}
+
+.start__more-icon,
+.start__showcase-btn-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ---- "Биржа" / "Миграция" — витрины ---- */
+
+.start__showcase {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.start__showcase-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* "Character Selection" — экспортирован из Figma одной SVG-картинкой
+   целиком (список персонажей биржи), не вёрстка. */
+.start__exchange {
+  display: flex;
+  justify-content: center;
+}
+
+.start__exchange-img {
+  width: 100%;
+  max-width: 412px;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.start__showcase-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 222 / 224;
+  max-width: 222px;
+  margin: 0 auto;
+}
+
+.start__showcase-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 79.28%;
+  aspect-ratio: 176 / 176;
+  z-index: 0;
+}
+
+.start__showcase-line img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.start__showcase-char {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.start__showcase-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.start__showcase-title {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 7.04px + 5.3333vw, 48px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.start__showcase-desc {
+  color: var(--color-milk);
+  opacity: 0.64;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+}
+
+/* ---- Финальный CTA — тот же стиль, что в Hero/About ---- */
+
+.start__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 10px;
+  background: var(--color-red);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.start__button:hover {
+  background: var(--color-red-hover);
+  transform: scale(0.96);
+}
+
+.start__button span {
+  color: var(--color-white);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Start — Tablet (768–1023px)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .start__inner {
+    padding: 96px 32px;
+  }
+
+  .start__headlines {
+    max-width: 536px;
+  }
+
+  .start__grid {
+    grid-template-columns: repeat(6, 56px);
+  }
+
+  .start__showcase {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .start__showcase-col {
+    flex: 1;
+    max-width: 340px;
+  }
+}
+
+/* ==========================================================================
+   Start — Desktop (>=1024px)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .start__inner {
+    padding: 128px 32px;
+  }
+
+  .start__container {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .start__headlines {
+    max-width: none;
+  }
+
+  .start__pack {
+    width: 672px;
+    margin: 0 auto;
+  }
+
+  .start__grid {
+    grid-template-columns: repeat(11, 56px);
+  }
+
+  .start__pack-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .start__showcase {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .start__showcase-col {
+    flex: 1;
+    max-width: none;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 40px;
+  }
+
+  .start__exchange {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .start__showcase-media {
+    flex-shrink: 0;
+  }
+
+  .start__showcase-text {
+    flex: 1;
+    align-items: flex-start;
+    text-align: left;
+  }
+}
