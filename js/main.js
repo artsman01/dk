@@ -13,7 +13,15 @@
   const percentText = document.getElementById("preloaderPercent");
   if (!preloader || !fill || !percentText) return;
 
+  // Ширину скроллбара компенсируем padding-right на время блокировки —
+  // просто body{overflow:hidden} без этого убирает скроллбар, и когда он
+  // возвращается назад (после finish()), вся страница дёргается вбок на
+  // его ширину. scrollbar-gutter:stable для этого не подошёл — он сдвигал
+  // ВСЕ position:fixed/absolute элементы с right:32px (шапку, quote-карточку
+  // и т.д.) на лишние ~15px, независимо от реального наличия скроллбара.
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
   document.body.style.overflow = "hidden";
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
 
   const mediaEls = Array.from(document.querySelectorAll("img, video")).filter(
     (el) => !preloader.contains(el)
@@ -33,6 +41,7 @@
     finished = true;
     setProgress(100);
     document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
     setTimeout(() => {
       preloader.classList.add("preloader--hidden");
     }, 300);
