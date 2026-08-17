@@ -1338,4 +1338,13 @@ p {
   .about__stat:last-child {
     border-right: none;
   }
+
+  /* Сброс горизонтальной линии у 3/4 плитки — та была для Tablet-сетки
+     2×2 (правило там на min-width:768px без верхней границы, поэтому
+     "протекало" и в Desktop, где карточки не в два ряда). Специфичность
+     должна совпадать с tablet-правилом (:nth-child), иначе не перебьёт. */
+  .about__stat:nth-child(3),
+  .about__stat:nth-child(4) {
+    border-top: none;
+  }
 }
