@@ -195,7 +195,13 @@ p {
   position: absolute;
   z-index: 1;
   top: 0;
-  bottom: 0;
+  /* height:100vh (не top:0;bottom:0!) — картинка редлайна имеет
+     фиксированные пропорции (в Figma её высота ~980px, не тянется на
+     всю высоту секции). На Mobile/Tablet .hero__inner — это высота
+     ВСЕГО сложенного в столбик контента (может быть > 1500px), и
+     stretch-to-bottom через object-fit:fill растягивал картинку до
+     полной нечитаемости/пропадания. */
+  height: 100vh;
   right: clamp(-156px, calc(-353.024px + 50.1333 * var(--vw100, 100vw) / 100), 32px);
   width: 240px;
   pointer-events: none;
@@ -595,17 +601,13 @@ p {
     order: 2;
   }
 
+  /* На Tablet quote — обычный элемент в потоке (см. свежий Figma-макет
+     node 1:357), НЕ прижат к углу — тот fixed/absolute-в-углу вариант
+     был для Desktop и раньше ошибочно "протекал" и на Tablet тоже
+     (правило было в этом же min-width:768px блоке). order:3 — после
+     visual, как в макете (Headlines → video → stats → quote). */
   .hero__quote {
-    position: absolute;
-    z-index: 45;
-    top: 32px;
-    /* .hero__inner центрируется и капается в max-width:1680px на широких
-       экранах (Desktop) — обычный right:32px "прилипал" бы к краю канвы,
-       а не экрана. Компенсируем половину зазора канвы, чтобы карточка
-       всегда была ровно в 32px от истинного края окна. */
-    right: calc(32px - max(0px, (var(--vw100, 100vw) - 1680px) / 2));
-    width: min(364px, calc(var(--vw100, 100vw) - 64px));
-    margin: 0;
+    order: 3;
   }
 
   .hero__date-split {
@@ -631,9 +633,11 @@ p {
     max-width: 536px;
   }
 
+  /* border-left/padding-left тут не нужны — это разделитель для
+     горизонтального ряда title+info (см. Desktop ниже), а на Tablet
+     .hero__text остаётся колонкой (row только с 1024px), в столбик
+     левая рамка выглядит оторванной от текста. */
   .hero__info {
-    padding-left: 48px;
-    border-left: 1px solid var(--color-glass-border);
     max-width: 536px;
     margin: 0 auto;
   }
@@ -681,6 +685,22 @@ p {
     padding: 32px;
     display: block;
     gap: 0;
+  }
+
+  /* Только на Desktop quote прижат к правому верхнему углу и не
+     скроллится вместе с остальным контентом — на Tablet это обычный
+     элемент в потоке (см. правило выше в блоке min-width:768px). */
+  .hero__quote {
+    position: absolute;
+    z-index: 45;
+    top: 32px;
+    /* .hero__inner центрируется и капается в max-width:1680px на широких
+       экранах — обычный right:32px "прилипал" бы к краю канвы, а не
+       экрана. Компенсируем половину зазора канвы, чтобы карточка
+       всегда была ровно в 32px от истинного края окна. */
+    right: calc(32px - max(0px, (var(--vw100, 100vw) - 1680px) / 2));
+    width: min(364px, calc(var(--vw100, 100vw) - 64px));
+    margin: 0;
   }
 
   /* На Desktop редлайн держится за персонажа в % от канвы (34.524% —
