@@ -387,6 +387,99 @@
 
   <div class="section-spacer" aria-hidden="true"></div>
 
+  <section class="registration" id="registration">
+    <div class="registration__inner">
+      <div class="registration__container">
+
+        <div class="registration__headlines">
+          <h2 class="registration__title">
+            <span class="registration__title-row">всего два действия</span>
+            <span class="registration__title-row registration__title-row--accent">и ты на базе</span>
+          </h2>
+          <p class="registration__subtitle">Ты уже с нами? Пу-пу-пу, подлиньше подзаголовок</p>
+        </div>
+
+        <div class="registration__cards">
+
+          <div class="registration__card">
+            <div class="registration__line" aria-hidden="true">
+              <img src="assets/img/registration-red.png" alt="" draggable="false" />
+              <span class="registration__number">01</span>
+            </div>
+
+            <div class="registration__card-head">
+              <h3 class="registration__card-title">Регистрация</h3>
+              <p class="registration__card-desc">Осталось несколько шагов и ты будешь на базе</p>
+            </div>
+
+            <form class="registration__form" novalidate>
+              <div class="registration__fields">
+                <input type="email" name="email" class="registration__input" placeholder="Почта" required autocomplete="email" />
+
+                <div class="registration__password">
+                  <input type="password" name="password" class="registration__input" placeholder="Пароль" required autocomplete="new-password" minlength="6" />
+                  <button type="button" class="registration__eye" aria-label="Показать пароль">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M4 13.3333C7.2 6.22222 16.8 6.22222 20 13.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M12 16.8889C11.6498 16.8889 11.303 16.8199 10.9795 16.6859C10.656 16.5519 10.362 16.3555 10.1144 16.1078C9.86675 15.8602 9.67033 15.5662 9.53632 15.2427C9.4023 14.9192 9.33333 14.5724 9.33333 14.2222C9.33333 13.872 9.4023 13.5253 9.53632 13.2017C9.67033 12.8782 9.86675 12.5842 10.1144 12.3366C10.362 12.089 10.656 11.8926 10.9795 11.7585C11.303 11.6245 11.6498 11.5556 12 11.5556C12.7072 11.5556 13.3855 11.8365 13.8856 12.3366C14.3857 12.8367 14.6667 13.515 14.6667 14.2222C14.6667 14.9295 14.3857 15.6077 13.8856 16.1078C13.3855 16.6079 12.7072 16.8889 12 16.8889Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="registration__password">
+                  <input type="password" name="password_confirm" class="registration__input" placeholder="Повторите пароль" required autocomplete="new-password" minlength="6" />
+                  <button type="button" class="registration__eye" aria-label="Показать пароль">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M4 13.3333C7.2 6.22222 16.8 6.22222 20 13.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M12 16.8889C11.6498 16.8889 11.303 16.8199 10.9795 16.6859C10.656 16.5519 10.362 16.3555 10.1144 16.1078C9.86675 15.8602 9.67033 15.5662 9.53632 15.2427C9.4023 14.9192 9.33333 14.5724 9.33333 14.2222C9.33333 13.872 9.4023 13.5253 9.53632 13.2017C9.67033 12.8782 9.86675 12.5842 10.1144 12.3366C10.362 12.089 10.656 11.8926 10.9795 11.7585C11.303 11.6245 11.6498 11.5556 12 11.5556C12.7072 11.5556 13.3855 11.8365 13.8856 12.3366C14.3857 12.8367 14.6667 13.515 14.6667 14.2222C14.6667 14.9295 14.3857 15.6077 13.8856 16.1078C13.3855 16.6079 12.7072 16.8889 12 16.8889Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="registration__submit">
+                <span>Зарегистрироваться</span>
+              </button>
+
+              <div class="registration__checkboxes">
+                <label class="registration__checkbox">
+                  <input type="checkbox" class="registration__checkbox-input" checked required />
+                  <svg class="registration__checkbox-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15.765 6.23498C15.8395 6.30928 15.8986 6.39754 15.9389 6.49472C15.9792 6.59189 16 6.69606 16 6.80127C16 6.90647 15.9792 7.01065 15.9389 7.10782C15.8986 7.20499 15.8395 7.29325 15.765 7.36755L8.56648 14.5661C8.49218 14.6406 8.40392 14.6997 8.30675 14.74C8.20958 14.7803 8.1054 14.8011 8.0002 14.8011C7.89499 14.8011 7.79082 14.7803 7.69365 14.74C7.59647 14.6997 7.50821 14.6406 7.43391 14.5661L4.23456 11.3667C4.08437 11.2166 4 11.0129 4 10.8005C4 10.5881 4.08437 10.3844 4.23456 10.2342C4.38475 10.084 4.58845 9.99961 4.80085 9.99961C5.01325 9.99961 5.21694 10.084 5.36713 10.2342L8.0002 12.8688L14.6324 6.23498C14.7067 6.1605 14.795 6.1014 14.8922 6.06108C14.9894 6.02076 15.0935 6 15.1987 6C15.3039 6 15.4081 6.02076 15.5053 6.06108C15.6025 6.1014 15.6907 6.1605 15.765 6.23498Z" fill="currentColor"/></svg>
+                  <span class="registration__checkbox-label">Я согласен с <a href="#" class="registration__checkbox-link">политикой конфиденциальности</a> и с <a href="#" class="registration__checkbox-link">правилами проекта</a></span>
+                </label>
+                <label class="registration__checkbox">
+                  <input type="checkbox" class="registration__checkbox-input" checked required />
+                  <svg class="registration__checkbox-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15.765 6.23498C15.8395 6.30928 15.8986 6.39754 15.9389 6.49472C15.9792 6.59189 16 6.69606 16 6.80127C16 6.90647 15.9792 7.01065 15.9389 7.10782C15.8986 7.20499 15.8395 7.29325 15.765 7.36755L8.56648 14.5661C8.49218 14.6406 8.40392 14.6997 8.30675 14.74C8.20958 14.7803 8.1054 14.8011 8.0002 14.8011C7.89499 14.8011 7.79082 14.7803 7.69365 14.74C7.59647 14.6997 7.50821 14.6406 7.43391 14.5661L4.23456 11.3667C4.08437 11.2166 4 11.0129 4 10.8005C4 10.5881 4.08437 10.3844 4.23456 10.2342C4.38475 10.084 4.58845 9.99961 4.80085 9.99961C5.01325 9.99961 5.21694 10.084 5.36713 10.2342L8.0002 12.8688L14.6324 6.23498C14.7067 6.1605 14.795 6.1014 14.8922 6.06108C14.9894 6.02076 15.0935 6 15.1987 6C15.3039 6 15.4081 6.02076 15.5053 6.06108C15.6025 6.1014 15.6907 6.1605 15.765 6.23498Z" fill="currentColor"/></svg>
+                  <span class="registration__checkbox-label">Я согласен на получение бонус-кодов и полезной информации о сервере</span>
+                </label>
+              </div>
+            </form>
+          </div>
+
+          <div class="registration__card">
+            <div class="registration__line" aria-hidden="true">
+              <img src="assets/img/registration-red.png" alt="" draggable="false" />
+              <span class="registration__number">02</span>
+            </div>
+
+            <div class="registration__card-head">
+              <h3 class="registration__card-title">файлы для игры</h3>
+              <p class="registration__card-desc">Скачай апдейтер и помести в пустую папку и нажми кнопку Check Files, у тебя скачается клиент последней версии</p>
+            </div>
+
+            <a href="#" class="registration__download">
+              <span>Скачать</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-spacer" aria-hidden="true"></div>
+
   <script src="js/main.js"></script>
 </body>
 </html>

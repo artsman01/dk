@@ -1815,3 +1815,413 @@ p {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   Registration — Mobile (base, <768px)
+   ========================================================================== */
+
+.registration {
+  position: relative;
+  background: var(--color-bg);
+  overflow: clip;
+}
+
+.registration__inner {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.registration__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ---- Заголовок ---- */
+
+.registration__headlines {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.registration__title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(32px, -1.536px + 8.5333vw, 64px);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+
+.registration__title-row--accent {
+  color: var(--color-red);
+}
+
+.registration__subtitle {
+  width: 100%;
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(16px, 13.904px + 0.5333vw, 18px);
+  line-height: clamp(26px, 23.904px + 0.5333vw, 28px);
+  text-align: center;
+}
+
+/* ---- Карточки ---- */
+
+.registration__cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.registration__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  padding: 0 16px 16px;
+}
+
+/* Красная картинка (registration-red.png) прижата к самому верху карточки
+   (у карточки нет верхнего паддинга — padding-top:0 в Figma), номер шага
+   ("01"/"02") лежит абсолютно поверх неё, тоже по центру. */
+.registration__line {
+  position: relative;
+  width: 96px;
+  aspect-ratio: 96 / 124;
+  flex-shrink: 0;
+}
+
+.registration__line img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.registration__number {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 7.04px + 5.3333vw, 48px);
+  line-height: 1;
+}
+
+.registration__card-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.registration__card-title {
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(28px, 7.04px + 5.3333vw, 48px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.registration__card-desc {
+  color: var(--color-milk);
+  opacity: 0.64;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+}
+
+/* ---- Форма (карточка "Регистрация") ---- */
+
+.registration__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.registration__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Реальный <input> — три визуальных состояния из Figma реализованы как
+   живые CSS-состояния одного и того же поля, а не три статичных примера:
+   пустое/обычное состояние = "Пароль" из макета (стекло, обводка невидима),
+   :focus/есть текст = "MyPass|" (обводка видна, фон чуть светлее),
+   невалидное после взаимодействия = "Почта" (красная обводка). */
+.registration__input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: var(--color-glass-bg);
+  border: 1px solid transparent;
+  color: var(--color-cream);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(13px, 11.952px + 0.2667vw, 14px);
+  line-height: clamp(18px, 15.904px + 0.5333vw, 20px);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.registration__input::placeholder {
+  color: rgba(213, 201, 189, 0.48);
+}
+
+.registration__input:focus,
+.registration__input:not(:placeholder-shown) {
+  background: var(--color-glass-border);
+  border-color: var(--color-glass-border);
+  outline: none;
+}
+
+.registration__input--error {
+  border-color: var(--color-red) !important;
+}
+
+.registration__password {
+  position: relative;
+}
+
+.registration__eye {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-cream);
+  opacity: 0.64;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.registration__eye:hover {
+  opacity: 1;
+}
+
+.registration__eye svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.registration__eye--active {
+  color: var(--color-red);
+  opacity: 1;
+}
+
+.registration__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 10px;
+  background: var(--color-red);
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.registration__submit:hover {
+  background: var(--color-red-hover);
+  transform: scale(0.98);
+}
+
+.registration__submit span {
+  color: var(--color-white);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  white-space: nowrap;
+}
+
+.registration__checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.registration__checkbox {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+/* appearance:none — сам инпут становится квадратом-чекбоксом (без
+   обёрток), доступность и клавиатурный фокус остаются нативными. */
+.registration__checkbox-input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  border-radius: 5px;
+  background: rgba(47, 47, 47, 0.48);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.registration__checkbox-icon {
+  display: none;
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--color-cream);
+  pointer-events: none;
+}
+
+.registration__checkbox-input:checked + .registration__checkbox-icon {
+  display: block;
+}
+
+/* Дефолтный синий фокус-ринг браузера заменяем на свой, в тон блока —
+   виден только при клавиатурной навигации (:focus-visible), не при клике. */
+.registration__checkbox-input:focus-visible {
+  outline: 2px solid var(--color-cream);
+  outline-offset: 2px;
+}
+
+/* rgba вместо opacity — иначе прозрачность родителя утянет за собой и
+   вложенную ссылку, и на ховере она не сможет посветлеть отдельно. */
+.registration__checkbox-label {
+  color: rgba(213, 201, 189, 0.64);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(13px, 11.952px + 0.2667vw, 14px);
+  line-height: clamp(18px, 15.904px + 0.5333vw, 20px);
+}
+
+.registration__checkbox-link {
+  color: var(--color-cream);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.registration__checkbox-link:hover {
+  color: var(--color-red);
+}
+
+/* ---- Кнопка-скачка (карточка "файлы для игры") ---- */
+
+.registration__download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 10px;
+  background: var(--color-cream);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.registration__download:hover {
+  background: var(--color-red);
+  transform: scale(0.98);
+}
+
+.registration__download span {
+  color: var(--color-bg);
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(14px, 11.904px + 0.5333vw, 16px);
+  line-height: clamp(20px, 15.808px + 1.0667vw, 24px);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.registration__download:hover span {
+  color: var(--color-white);
+}
+
+/* ==========================================================================
+   Registration — Tablet (768–1023px)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .registration__inner {
+    padding: 32px;
+  }
+
+  .registration__container {
+    gap: 48px;
+  }
+
+  .registration__headlines {
+    gap: 24px;
+  }
+
+  .registration__card {
+    gap: 24px;
+    padding: 0 32px 32px;
+  }
+}
+
+/* ==========================================================================
+   Registration — Desktop (>=1024px)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .registration__inner {
+    padding: 48px;
+  }
+
+  .registration__container {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .registration__cards {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .registration__card {
+    flex: 1;
+  }
+
+  .registration__form,
+  .registration__fields,
+  .registration__checkboxes {
+    width: 100%;
+  }
+}

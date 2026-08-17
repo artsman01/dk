@@ -77,3 +77,37 @@
     cells.forEach((c) => c.classList.remove("is-active"));
   });
 })();
+
+// Форма регистрации: глазик переключает type инпута password/text у
+// соседнего поля, чекбоксы — нативные (appearance:none, стилизация в CSS).
+// Красная обводка (--error) вешается по месту, на конкретный невалидный
+// инпут, при попытке сабмита, и снимается, как только начали печатать —
+// бэкенда нет, поэтому дальше сабмита форма никуда не уходит.
+(function () {
+  document.querySelectorAll(".registration__eye").forEach((btn) => {
+    const input = btn.closest(".registration__password").querySelector(".registration__input");
+    btn.addEventListener("click", () => {
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      btn.classList.toggle("registration__eye--active", isPassword);
+      btn.setAttribute("aria-label", isPassword ? "Скрыть пароль" : "Показать пароль");
+    });
+  });
+
+  document.querySelectorAll(".registration__form").forEach((form) => {
+    const inputs = form.querySelectorAll(".registration__input");
+
+    inputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        input.classList.remove("registration__input--error");
+      });
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      inputs.forEach((input) => {
+        input.classList.toggle("registration__input--error", !input.checkValidity());
+      });
+    });
+  });
+})();
