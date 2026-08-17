@@ -1510,9 +1510,23 @@ p {
   transition: color 0.2s ease;
 }
 
-.start__more:hover,
-.start__showcase-btn:hover {
+/* "Подробнее"/"Поддержка" внутри карточек-витрин — стеклянная кнопка
+   (не просто текст-ссылка, как .start__more), по Figma. */
+.start__showcase-btn {
+  height: 36px;
+  padding: 0 8px 0 16px;
+  border-radius: 8px;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  transition: border-color 0.2s ease;
+}
+
+.start__more:hover {
   color: var(--color-white);
+}
+
+.start__showcase-btn:hover {
+  border-color: var(--color-cream);
 }
 
 .start__more-icon,
@@ -1693,6 +1707,7 @@ p {
 
   .start__headlines {
     max-width: none;
+    gap: 24px;
   }
 
   .start__pack {
