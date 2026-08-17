@@ -134,17 +134,18 @@
               class="about__video-media"
               src="assets/video/preview.mp4"
               poster="assets/img/about-video-poster.png"
-              playsinline
+              autoplay
+              muted
               loop
-              preload="metadata"
+              playsinline
               disablePictureInPicture
               disableRemotePlayback
               controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
             ></video>
             <div class="about__video-overlay"></div>
-            <button class="about__play" type="button" aria-label="Смотреть видео">
-              <img src="assets/img/about-play-icon.svg" alt="" class="about__play-icon" draggable="false" />
-            </button>
+            <a class="about__play" href="#" target="_blank" rel="noopener" aria-label="Смотреть на YouTube">
+              <img src="assets/img/play.svg" alt="" class="about__play-icon" draggable="false" />
+            </a>
           </div>
           <div class="about__line" aria-hidden="true">
             <img src="assets/img/about-red.png" alt="" class="about__line-img" />
@@ -156,19 +157,19 @@
         <div class="about__stats">
           <div class="about__stat">
             <p class="about__stat-number">4568</p>
-            <p class="about__stat-desc">Максимальный онлайн за все время</p>
+            <p class="about__stat-desc">Максимальный онлайн<br />за все время</p>
           </div>
           <div class="about__stat">
             <p class="about__stat-number">20</p>
-            <p class="about__stat-desc">Релизнутых обновлений для игроков</p>
+            <p class="about__stat-desc">Релизнутых обновлений<br />для игроков</p>
           </div>
           <div class="about__stat">
             <p class="about__stat-number">50</p>
-            <p class="about__stat-desc">Собранных кланов, которые продолжают играть</p>
+            <p class="about__stat-desc">Собранных кланов, которые<br />продолжают играть</p>
           </div>
           <div class="about__stat">
             <p class="about__stat-number">127</p>
-            <p class="about__stat-desc">Часов средений суммарный онлайн игрока</p>
+            <p class="about__stat-desc">Часов средений суммарный<br />онлайн игрока</p>
           </div>
         </div>
 

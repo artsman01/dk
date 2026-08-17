@@ -31,28 +31,6 @@
   });
 })();
 
-// About-блок: кнопка play запускает/ставит на паузу видео, прячет
-// оверлей затемнения и саму кнопку на время воспроизведения.
-(function () {
-  document.querySelectorAll(".about__play").forEach((btn) => {
-    const wrap = btn.closest(".about__video");
-    const video = wrap && wrap.querySelector(".about__video-media");
-    if (!video) return;
-
-    btn.addEventListener("click", () => {
-      if (video.paused) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    });
-
-    video.addEventListener("play", () => wrap.classList.add("is-playing"));
-    video.addEventListener("pause", () => wrap.classList.remove("is-playing"));
-    video.addEventListener("ended", () => wrap.classList.remove("is-playing"));
-  });
-})();
-
 // Film-grain шум на весь сайт: раз в 100мс дёргаем background-position
 // зерно-тайла на случайную позицию — дёшево (просто смена одного CSS-
 // свойства, без canvas/перерисовки), даёт эффект "живого" зерна/VHS без

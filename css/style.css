@@ -1087,11 +1087,6 @@ p {
   pointer-events: none;
 }
 
-.about__video.is-playing .about__play,
-.about__video.is-playing .about__video-overlay {
-  opacity: 0;
-  pointer-events: none;
-}
 
 /* На Mobile "капля" в потоке, сразу под видео, без зазора. Одна и та же
    картинка (about-red.png, 480×460) на всех разрешениях — меняется
@@ -1147,10 +1142,7 @@ p {
 
 .about__stat-number {
   display: inline-block;
-  background: linear-gradient(180deg, var(--color-cream) 0%, transparent 84%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-cream);
   font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(56px, 14.08px + 10.6667vw, 96px);
@@ -1212,9 +1204,14 @@ p {
     margin-bottom: 0;
   }
 
-  /* На Tablet+ "капля" — абсолютный оверлей под видео, не влияет на flow */
+  /* На Tablet+ "капля" — абсолютный оверлей под видео, не влияет на flow.
+     z-index:-1 — иначе position:absolute красит её поверх обычного
+     статичного .about__description (позиционированные элементы всегда
+     красятся над non-positioned even, если z-index:auto), а нужно
+     наоборот — картинка должна быть ПОД текстом описания. */
   .about__line {
     position: absolute;
+    z-index: -1;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
