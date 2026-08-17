@@ -1435,10 +1435,16 @@ p {
   text-transform: uppercase;
 }
 
+/* Строго 1px везде (и по краю, и между ячейками) — border-collapse
+   вручную: у контейнера только left+top, у каждой ячейки только
+   right+bottom. Так соседние ячейки делят ровно одну линию, а не две
+   (было: border у ячейки со всех сторон + отрицательный margin —
+   неточно, где-то давало 1px, где-то 2px). */
 .start__grid {
   display: grid;
   grid-template-columns: repeat(4, 56px);
-  border: 1px solid var(--color-stat-divider);
+  border-left: 1px solid var(--color-glass-border);
+  border-top: 1px solid var(--color-glass-border);
   justify-content: center;
 }
 
@@ -1447,8 +1453,8 @@ p {
   width: 56px;
   height: 56px;
   background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
-  margin: -0.5px;
+  border-right: 1px solid var(--color-glass-border);
+  border-bottom: 1px solid var(--color-glass-border);
 }
 
 .start__item {
