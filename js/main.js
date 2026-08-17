@@ -1,34 +1,47 @@
 // Death Knight landing — общий скрипт.
 
-// Прелоадер: держит страницу закрытой (просто лого по центру), пока не
-// догрузятся все <img>/<video> на странице. Скрипт лежит в конце body,
-// поэтому все теги уже в DOM на момент запуска (часть картинок к этому
-// моменту уже могла догрузиться — такие сразу считаются готовыми через
-// .complete/.readyState). На случай битой ссылки/зависшей загрузки —
-// ошибка тоже засчитывается как "готово" (иначе прелоадер завис бы
-// навсегда), плюс общий таймаут-предохранитель.
+// Прелоадер: держит страницу закрытой, пока не догрузятся все <img>/<video>
+// на странице (реальный прогресс, не имитация) — бар и процент отражают
+// loaded/total. Скрипт лежит в конце body, поэтому все теги уже в DOM на
+// момент запуска (часть картинок к этому моменту уже могла догрузиться —
+// такие сразу считаются готовыми через .complete/.readyState). На случай
+// битой ссылки/зависшей загрузки — ошибка тоже засчитывается как "готово"
+// (иначе прелоадер завис бы навсегда), плюс общий таймаут-предохранитель.
 (function () {
   const preloader = document.getElementById("preloader");
-  if (!preloader) return;
+  const fill = document.getElementById("preloaderFill");
+  const percentText = document.getElementById("preloaderPercent");
+  if (!preloader || !fill || !percentText) return;
 
   document.body.style.overflow = "hidden";
 
   const mediaEls = Array.from(document.querySelectorAll("img, video")).filter(
     (el) => !preloader.contains(el)
   );
+  const total = mediaEls.length || 1;
   let loaded = 0;
   let finished = false;
+
+  function setProgress(pct) {
+    const clamped = Math.min(100, Math.round(pct));
+    fill.style.width = `${clamped}%`;
+    percentText.textContent = `${clamped}%`;
+  }
 
   function finish() {
     if (finished) return;
     finished = true;
+    setProgress(100);
     document.body.style.overflow = "";
-    preloader.classList.add("preloader--hidden");
+    setTimeout(() => {
+      preloader.classList.add("preloader--hidden");
+    }, 300);
   }
 
   function markLoaded() {
     loaded += 1;
-    if (loaded >= mediaEls.length) finish();
+    setProgress((loaded / total) * 100);
+    if (loaded >= total) finish();
   }
 
   if (mediaEls.length === 0) {
