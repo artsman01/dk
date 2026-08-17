@@ -995,7 +995,7 @@ p {
   width: 100%;
   max-width: 1680px;
   margin: 0 auto;
-  padding: 64px 16px;
+  padding: 16px;
 }
 
 .about__container {
@@ -1235,7 +1235,7 @@ p {
 
 @media (min-width: 768px) {
   .about__inner {
-    padding: 96px 32px;
+    padding: 32px;
   }
 
   .about__container {
@@ -1294,7 +1294,7 @@ p {
 
 @media (min-width: 1024px) {
   .about__inner {
-    padding: 128px 32px;
+    padding: 48px;
   }
 
   .about__container {
@@ -1360,6 +1360,12 @@ p {
    иконки/рамки/количество в пустые .start__cell).
    ========================================================================== */
 
+/* Невидимый спейсер между блоками — фикс 32px на всех разрешениях,
+   не зависит от резиновых паддингов самих секций. */
+.section-spacer {
+  height: 32px;
+}
+
 .start {
   position: relative;
   background: var(--color-bg);
@@ -1370,7 +1376,7 @@ p {
   width: 100%;
   max-width: 1680px;
   margin: 0 auto;
-  padding: 64px 16px;
+  padding: 16px;
 }
 
 .start__container {
@@ -1732,7 +1738,7 @@ p {
 
 @media (min-width: 768px) {
   .start__inner {
-    padding: 96px 32px;
+    padding: 32px;
   }
 
   /* Резиновый на всю ширину контейнера, без max-width — тот же принцип,
@@ -1762,7 +1768,7 @@ p {
 
 @media (min-width: 1024px) {
   .start__inner {
-    padding: 128px 32px;
+    padding: 48px;
   }
 
   .start__container {
